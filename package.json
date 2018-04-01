@@ -1,0 +1,27 @@
+{
+  "name": "WorkEther",
+  "version": "0.1.0",
+  "description": "based on ERC223 token standard",
+  "main": "truffle.js",
+  "scripts": {
+    "test": "./test.sh"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://bitbucket.org/sohelmkm/workether/src/b7a1c825ee5ebf65fc4c5662d3fccde9ffeb44fe?at=master"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://bitbucket.org/sohelmkm/workether/src/b7a1c825ee5ebf65fc4c5662d3fccde9ffeb44fe?at=master"
+  },
+  "homepage": "https://bitbucket.org/sohelmkm/workether/src/b7a1c825ee5ebf65fc4c5662d3fccde9ffeb44fe?at=master",
+  "devDependencies": {
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-es2015": "^6.18.0",
+    "babel-preset-stage-2": "^6.18.0",
+    "babel-preset-stage-3": "^6.17.0",
+    "babel-register": "^6.26.0",
+    "ethereumjs-testrpc": "^4.1.3",
+    "truffle": "^3.4.11"
+  }
+}
