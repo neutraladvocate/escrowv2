@@ -1,6 +1,6 @@
 pragma solidity ^0.4.8;
 
- /* ERC223 additions to ERC20 */
+ /* WorkEther token contract code . ERC223 additions to ERC20 */
 
 import "../interface/ERC223.sol";
 import "../interface/ERC223Receiver.sol";
@@ -9,9 +9,15 @@ import "./StandardToken.sol";
 
 contract wethr_token is ERC223, StandardToken {
 
-  string public constant name = "WorkEther";
-  string public constant symbol = "wethr";
-  uint8  public constant decimals = 18;  
+    uint public constant initialSupply = 1000000;
+    string public constant name = "WorkEther";
+    string public constant symbol = "wethr";
+    uint8  public constant decimals = 18;  
+
+  /* Initializes contract with initial supply tokens to the creator of the contract */
+  function wethr_token  () payable public {
+        balances[msg.sender] = initialSupply;              // Give the creator all initial tokens
+  }
 
   //function that is called when a user or another contract wants to transfer funds
   function transfer(address _to, uint _value, bytes _data) returns (bool success) {
@@ -48,4 +54,7 @@ contract wethr_token is ERC223, StandardToken {
     assembly { length := extcodesize(_addr) }
     return length > 0;
   }
+
+  
+
 }
