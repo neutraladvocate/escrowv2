@@ -85,7 +85,7 @@
         "id": 345,
         "nodeType": "ImportDirective",
         "scope": 495,
-        "sourceUnit": 896,
+        "sourceUnit": 1692,
         "src": "59:41:4",
         "symbolAliases": [],
         "unitAlias": ""
@@ -99,10 +99,10 @@
               "id": 346,
               "name": "ERC223Receiver",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 895,
+              "referencedDeclaration": 1691,
               "src": "134:14:4",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_ERC223Receiver_$895",
+                "typeIdentifier": "t_contract$_ERC223Receiver_$1691",
                 "typeString": "contract ERC223Receiver"
               }
             },
@@ -112,7 +112,7 @@
           }
         ],
         "contractDependencies": [
-          895
+          1691
         ],
         "contractKind": "contract",
         "documentation": null,
@@ -120,7 +120,7 @@
         "id": 494,
         "linearizedBaseContracts": [
           494,
-          895
+          1691
         ],
         "name": "Standard223Receiver",
         "nodeType": "ContractDefinition",
@@ -349,7 +349,7 @@
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 1039,
+                            "referencedDeclaration": 1835,
                             "src": "420:3:4",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_message",
@@ -471,7 +471,7 @@
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 1039,
+                            "referencedDeclaration": 1835,
                             "src": "562:3:4",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_message",
@@ -752,7 +752,7 @@
                               "name": "this",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 1052,
+                              "referencedDeclaration": 1848,
                               "src": "670:4:4",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_contract$_Standard223Receiver_$494",
@@ -1088,7 +1088,7 @@
             "scope": 494,
             "src": "294:616:4",
             "stateMutability": "nonpayable",
-            "superFunction": 894,
+            "superFunction": 1690,
             "visibility": "public"
           },
           {
@@ -2139,7 +2139,7 @@
         "id": 345,
         "nodeType": "ImportDirective",
         "scope": 495,
-        "sourceUnit": 896,
+        "sourceUnit": 1692,
         "src": "59:41:4",
         "symbolAliases": [],
         "unitAlias": ""
@@ -2153,10 +2153,10 @@
               "id": 346,
               "name": "ERC223Receiver",
               "nodeType": "UserDefinedTypeName",
-              "referencedDeclaration": 895,
+              "referencedDeclaration": 1691,
               "src": "134:14:4",
               "typeDescriptions": {
-                "typeIdentifier": "t_contract$_ERC223Receiver_$895",
+                "typeIdentifier": "t_contract$_ERC223Receiver_$1691",
                 "typeString": "contract ERC223Receiver"
               }
             },
@@ -2166,7 +2166,7 @@
           }
         ],
         "contractDependencies": [
-          895
+          1691
         ],
         "contractKind": "contract",
         "documentation": null,
@@ -2174,7 +2174,7 @@
         "id": 494,
         "linearizedBaseContracts": [
           494,
-          895
+          1691
         ],
         "name": "Standard223Receiver",
         "nodeType": "ContractDefinition",
@@ -2403,7 +2403,7 @@
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 1039,
+                            "referencedDeclaration": 1835,
                             "src": "420:3:4",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_message",
@@ -2525,7 +2525,7 @@
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 1039,
+                            "referencedDeclaration": 1835,
                             "src": "562:3:4",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_message",
@@ -2806,7 +2806,7 @@
                               "name": "this",
                               "nodeType": "Identifier",
                               "overloadedDeclarations": [],
-                              "referencedDeclaration": 1052,
+                              "referencedDeclaration": 1848,
                               "src": "670:4:4",
                               "typeDescriptions": {
                                 "typeIdentifier": "t_contract$_Standard223Receiver_$494",
@@ -3142,7 +3142,7 @@
             "scope": 494,
             "src": "294:616:4",
             "stateMutability": "nonpayable",
-            "superFunction": 894,
+            "superFunction": 1690,
             "visibility": "public"
           },
           {
@@ -4172,5 +4172,5 @@
   },
   "networks": {},
   "schemaVersion": "2.0.0",
-  "updatedAt": "2018-03-31T10:15:57.845Z"
+  "updatedAt": "2018-04-16T12:14:40.285Z"
 }

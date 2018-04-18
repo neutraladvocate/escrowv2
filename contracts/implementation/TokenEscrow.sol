@@ -24,7 +24,7 @@ contract TokenEscrow {
     owner = _owner;
   }
 
-  uint escrowId;
+  int escrowId=1;
 
   function TokenEscrow() {
     owner = msg.sender;
@@ -91,10 +91,11 @@ contract TokenEscrow {
     suicide(msg.sender);
   }
 
-  function getEscrowId() internal returns (uint) {
+  function getEscrowId() internal returns (int) {
     return escrowId++;
   }
 
-
-
+  function getEscrowIdExt() returns (int) {
+    return escrowId++;
+  }
 }

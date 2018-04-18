@@ -154,7 +154,7 @@
         ],
         "contractDependencies": [
           494,
-          895
+          1691
         ],
         "contractKind": "contract",
         "documentation": null,
@@ -163,7 +163,7 @@
         "linearizedBaseContracts": [
           57,
           494,
-          895
+          1691
         ],
         "name": "ExampleReceiver",
         "nodeType": "ContractDefinition",
@@ -888,7 +888,7 @@
         ],
         "contractDependencies": [
           494,
-          895
+          1691
         ],
         "contractKind": "contract",
         "documentation": null,
@@ -897,7 +897,7 @@
         "linearizedBaseContracts": [
           57,
           494,
-          895
+          1691
         ],
         "name": "ExampleReceiver",
         "nodeType": "ContractDefinition",
@@ -1573,5 +1573,5 @@
   },
   "networks": {},
   "schemaVersion": "2.0.0",
-  "updatedAt": "2018-03-31T10:15:57.841Z"
+  "updatedAt": "2018-04-16T12:14:40.280Z"
 }
