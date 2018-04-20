@@ -7,7 +7,7 @@ if [ ! $trpc_running ]; then
   testrpc > /dev/null &
   trpc_pid=$!
 fi
-/home/sohel/.nvm/versions/node/v8.9.4/lib/node_modules/truffle/build/cli.bundled.js test
+./node_modules/truffle/build/cli.bundled.js test
 if [ ! $trpc_running ]; then
   kill -9 $trpc_pid
 fi
