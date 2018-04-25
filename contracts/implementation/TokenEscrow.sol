@@ -50,7 +50,7 @@ contract TokenEscrow {
   }
 
   // Incoming transfer from the buyer
-  function() {
+  function() payable {
     Escrow escrow = escrows[msg.sender];
 
     // Contract not set up
@@ -95,7 +95,47 @@ contract TokenEscrow {
     return escrowId++;
   }
 
-  function getEscrowIdExt() returns (int) {
-    return escrowId++;
+    function getOwner() returns (address) {
+    return address(this) ;
   }
+
+// Incoming transfer from the buyer
+  function receive(uint amount) payable {
+    Escrow escrow = escrows[msg.sender];
+
+    // Contract not set up
+    if (escrow.token == 0)
+      throw;
+
+    IToken token = IToken(escrow.token);
+
+    // Check the token contract if we have been issued tokens already
+    if (!escrow.tokenReceived) {
+      uint balance = token.balanceOf(this);
+      if (balance >= escrow.tokenAmount)
+        escrow.tokenReceived = true;
+      // FIXME: what to do if we've received more tokens than required?
+    }
+
+    // No tokens yet
+    if (!escrow.tokenReceived)
+      throw;
+
+    // Buyer's price is below the agreed
+    if (amount < escrow.price)
+      throw;
+
+    // Transfer tokens to buyer
+    token.transfer(escrow.recipient, escrow.tokenAmount);
+
+    // Transfer money to seller
+    escrow.seller.send(escrow.price);
+
+    // Refund buyer if overpaid
+    msg.sender.send(escrow.price - amount);
+
+    delete escrows[msg.sender];
+  }
+
+
 }
