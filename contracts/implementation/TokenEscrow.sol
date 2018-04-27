@@ -15,6 +15,10 @@ pragma solidity ^0.4.8;
 contract IToken {
   function balanceOf(address _address) constant returns (uint balance);
   function transfer(address _to, uint _value) returns (bool success);
+  function transferFrom(address from, address to, uint value) returns (bool ok);
+  function approve(address spender, uint value) returns (bool ok);
+
+
 }
 
 contract TokenEscrow {
@@ -49,7 +53,7 @@ contract TokenEscrow {
      create(token, tokenAmount, price, seller, buyer, buyer);
   }
 
-  // Incoming transfer from the buyer
+  // Incoming transfer from the buyer, following default function did'nt work hence recreated as receive
   function() payable {
     Escrow escrow = escrows[msg.sender];
 
@@ -125,11 +129,15 @@ contract TokenEscrow {
     if (amount < escrow.price)
       throw;
 
-    // Transfer tokens to buyer
-    token.transfer(escrow.recipient, escrow.tokenAmount);
+    // Transfer tokens to buyer, this probably only works for ether, hence using EC20 transferFrom
+    //https://ethereum.stackexchange.com/questions/17322/using-solidity-how-can-i-transfer-erc20-tokens-from-the-current-address-to-anot
+    //token.transfer(escrow.recipient, escrow.tokenAmount);
+    token.approve(msg.sender,escrow.tokenAmount);
+    token.approve(escrow.recipient,escrow.tokenAmount);
+    token.transferFrom(msg.sender,escrow.recipient,escrow.tokenAmount);
 
     // Transfer money to seller
-    escrow.seller.send(escrow.price);
+    //escrow.seller.send(escrow.price);
 
     // Refund buyer if overpaid
     msg.sender.send(escrow.price - amount);
