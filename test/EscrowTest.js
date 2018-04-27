@@ -24,7 +24,7 @@ contract('WETHRESCROW', async (accounts) => {
   })
 
   it("should add wethr to buyer account", async () => {
-    await wethrInstance.transfer(buyer,10000000)
+    await wethrInstance.transfer(buyer,10000000);
     let balance = await wethrInstance.balanceOf(buyer);
     assert.equal(balance.valueOf(), 10000000);
   })
