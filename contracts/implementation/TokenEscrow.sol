@@ -17,8 +17,6 @@ contract IToken {
   function transfer(address _to, uint _value) returns (bool success);
   function transferFrom(address from, address to, uint value) returns (bool ok);
   function approve(address spender, uint value) returns (bool ok);
-
-
 }
 
 contract TokenEscrow {
