@@ -16,9 +16,9 @@ contract('WETHRESCROW', async (accounts) => {
 
   it("should create WETHR and ESCROW with address and balance in owner account", async () => {
     wethrInstance = await TokenWethr.deployed();
-    wethrAddress = await wethrInstance.address;
+    wethrAddress = wethrInstance.address;
     escrowInstance = await ContractEscrow.deployed();
-    escrowAddress = await escrowInstance.address;
+    escrowAddress = escrowInstance.address;
     let balance = await wethrInstance.balanceOf(owner);
     assert.equal(balance.valueOf(), 50000000);
   })
