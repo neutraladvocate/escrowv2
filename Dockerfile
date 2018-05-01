@@ -7,4 +7,4 @@ ADD . /app
 RUN npm install -g truffle
 RUN npm install
 
-ENTRYPOINT truffle test test/EscrowTest.js
+ENTRYPOINT truffle test test/EscrowTest.js --verbose-rpc
