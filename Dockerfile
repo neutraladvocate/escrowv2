@@ -4,8 +4,7 @@ WORKDIR /app
 
 ADD . /app
 
+RUN npm install -g truffle
 RUN npm install
 
-EXPOSE 80
-
-ENTRYPOINT [ "sh", "/app/test.sh" ]
+ENTRYPOINT truffle test test/EscrowTest.js
