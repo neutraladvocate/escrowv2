@@ -32,9 +32,9 @@ module.exports = {
       host: 'localhost',
       port: 8546,
     },
-    gcp: {
-      network_id: 15,
-      host: '10.11.249.213',  
+    neutadv: {
+      network_id: '*',
+      host: 'testrpc',  
       port: 8545
     }
   },
