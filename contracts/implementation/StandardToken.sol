@@ -21,6 +21,7 @@ contract StandardToken is ERC20, SafeMath {
     balances[msg.sender] = safeSub(balances[msg.sender], _value);
     balances[_to] = safeAdd(balances[_to], _value);
     Transfer(msg.sender, _to, _value);
+    //Transfer(msg.sender, _to, 5000);
     return true;
   }
 

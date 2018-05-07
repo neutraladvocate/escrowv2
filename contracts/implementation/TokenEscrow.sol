@@ -27,8 +27,9 @@ contract TokenEscrow {
   }
 
   int escrowId=1;
+  uint balanceToken;
 
-  function TokenEscrow() {
+  function TokenEscrow() payable {
     owner = msg.sender;
   }
 
@@ -43,6 +44,11 @@ contract TokenEscrow {
 
   mapping (address => Escrow) public escrows;
 
+
+    // Status of transaction. Used for error handling.
+    event Status(uint statusCode);
+
+
   function create(address token, uint tokenAmount, uint price, address seller, address buyer, address recipient) {
     escrows[buyer] = Escrow(token, tokenAmount, false, price, seller, recipient);
   }
@@ -53,67 +59,27 @@ contract TokenEscrow {
 
   // Incoming transfer from the buyer, following default function did'nt work hence recreated as receive
   function() payable {
-    Escrow escrow = escrows[msg.sender];
-
-    // Contract not set up
-    if (escrow.token == 0)
-      throw;
-
-    IToken token = IToken(escrow.token);
-
-    // Check the token contract if we have been issued tokens already
-    if (!escrow.tokenReceived) {
-      uint balance = token.balanceOf(this);
-      if (balance >= escrow.tokenAmount)
-        escrow.tokenReceived = true;
-      // FIXME: what to do if we've received more tokens than required?
-    }
-
-    // No tokens yet
-    if (!escrow.tokenReceived)
-      throw;
-
-    // Buyer's price is below the agreed
-    if (msg.value < escrow.price)
-      throw;
-
-    // Transfer tokens to buyer
-    token.transfer(escrow.recipient, escrow.tokenAmount);
-
-    // Transfer money to seller
-    escrow.seller.send(escrow.price);
-
-    // Refund buyer if overpaid
-    msg.sender.send(escrow.price - msg.value);
-
-    delete escrows[msg.sender];
-  }
-
-  function kill() owneronly {
-    suicide(msg.sender);
-  }
-
-  function getEscrowId() internal returns (int) {
-    return escrowId++;
-  }
-
-    function getOwner() returns (address) {
-    return address(this) ;
+      receive();
   }
 
 // Incoming transfer from the buyer
-  function receive(uint amount) payable {
+  function receive() payable {
     Escrow escrow = escrows[msg.sender];
 
     // Contract not set up
     if (escrow.token == 0)
-      throw;
-
+    {
+      //Error("No escrows created by the called buyer");
+      emit Status(101);
+      revert();
+    }
     IToken token = IToken(escrow.token);
 
     // Check the token contract if we have been issued tokens already
     if (!escrow.tokenReceived) {
       uint balance = token.balanceOf(this);
+      balanceToken = balance;
+       emit Status(balance);
       if (balance >= escrow.tokenAmount)
         escrow.tokenReceived = true;
       // FIXME: what to do if we've received more tokens than required?
@@ -124,8 +90,8 @@ contract TokenEscrow {
       throw;
 
     // Buyer's price is below the agreed
-    if (amount < escrow.price)
-      throw;
+    //if (amount < escrow.price)
+      //throw;
 
     // Transfer tokens to buyer, this probably only works for ether, hence using EC20 transferFrom
     //https://ethereum.stackexchange.com/questions/17322/using-solidity-how-can-i-transfer-erc20-tokens-from-the-current-address-to-anot
@@ -138,7 +104,7 @@ contract TokenEscrow {
     //escrow.seller.send(escrow.price);
 
     // Refund buyer if overpaid
-    msg.sender.send(escrow.price - amount);
+    //msg.sender.send(escrow.price - amount);
 
     delete escrows[msg.sender];
   }

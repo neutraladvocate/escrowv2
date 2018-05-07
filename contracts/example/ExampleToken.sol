@@ -1,5 +1,4 @@
 pragma solidity ^0.4.8;
-
 import "../implementation/wethr_token.sol";
 
 contract ExampleToken is wethr_token {
