@@ -33,9 +33,8 @@ function Escrow(address buyer_address, address seller_address, address token_add
 
     }
     
-    event Status(uint statusCode);
-    event LogTokenPayable(uint i, address token, address sender, uint value);
     event EscrowEvent(uint code, string etype, address sender, uint value);
+    event EscrowError(uint code, string etype, address sender, uint value);
 
     function accept() public {
         if (msg.sender == buyer){
@@ -61,12 +60,11 @@ function Escrow(address buyer_address, address seller_address, address token_add
         // Check the token contract if we have been issued tokens already
 //          token.approve(this, this.balance);
 //          if (token.transferFrom(this, seller, this.balance)) {
-        Status(this.balance); //fail to transfer from escrow to seller
 
         if (token.transfer(seller, this.balance)) {
             balance = 0;
         } else {
-            Status(102); //fail to transfer from escrow to seller
+            EscrowError(101, "TransferFailed", msg.sender,0);
             throw;
         }
     EscrowEvent(200, "payBalance", msg.sender,this.balance);
@@ -99,7 +97,7 @@ function Escrow(address buyer_address, address seller_address, address token_add
             selfdestruct(buyer);
         }else
         {
-            Status(107); //unauthorised call for arbitrate 
+            EscrowError(101, "Unauth call", msg.sender,msg.value);
         }
 
         EscrowEvent(500, "arbitrateInFavorOfBuyer", msg.sender,msg.value);
@@ -112,7 +110,7 @@ function Escrow(address buyer_address, address seller_address, address token_add
             payBalance();
         }else
         {
-            Status(107); //unauthorised call for arbitrate 
+            EscrowError(101, "Unauth call", msg.sender,msg.value);
         }
         EscrowEvent(600, "arbitrateInFavorOfSeller", msg.sender,msg.value);
         
@@ -124,13 +122,8 @@ function Escrow(address buyer_address, address seller_address, address token_add
         }
     }
 
-  function foo(/*uint i*/) tokenPayable {
-    LogTokenPayable(1, tkn.addr, tkn.sender, tkn.value);
-  }
 
-  function () tokenPayable {
-    LogTokenPayable(0, tkn.addr, tkn.sender, tkn.value);
-  }
+
 
   function supportsToken(address token) returns (bool) {
     return true;

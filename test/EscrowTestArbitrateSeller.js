@@ -5,7 +5,7 @@ var ContractEscrow = artifacts.require("../contracts/implementation/Escrow.sol")
 
 
 
-contract('WETHRESCROW', async (accounts) => {
+contract('Escrow-Arbitrate-Seller', async (accounts) => {
   var owner = accounts[0];
   var buyer = accounts[1];
   var seller = accounts[2];
@@ -46,9 +46,8 @@ contract('WETHRESCROW', async (accounts) => {
   })
 
 
-  it("The happy path should show funds transferred to seller after both acceptance", async () => {
-    await escrowInstance.accept({from: buyer});
-    await escrowInstance.accept({from: seller});
+  it("When mediator arbitrates in favour of Buyer it should show funds transferred to seller", async () => {
+    await escrowInstance.arbitrateInFavorOfSeller({from: owner});
     let balance = await wethrInstance.balanceOf(seller);
     assert.equal(balance.valueOf(), escrowAmount);
   })
