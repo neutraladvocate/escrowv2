@@ -46,9 +46,9 @@ contract('Escrow-Arbitrate-Seller', async (accounts) => {
   })
 
 
-  it("When mediator arbitrates in favour of Seller it should show funds transferred to seller", async () => {
-    await escrowInstance.arbitrateInFavorOf(seller,{from: owner});
-    let balance = await wethrInstance.balanceOf(seller);
+  it("When mediator arbitrates in favour of Buyer it should show funds transferred to buyer", async () => {
+    await escrowInstance.arbitrateInFavorOf(buyer,{from: owner});
+    let balance = await wethrInstance.balanceOf(buyer);
     assert.equal(balance.valueOf(), escrowAmount);
   })
 

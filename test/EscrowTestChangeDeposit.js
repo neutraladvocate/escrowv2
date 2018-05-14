@@ -5,7 +5,7 @@ var ContractEscrow = artifacts.require("../contracts/implementation/Escrow.sol")
 
 
 
-contract('Escrow-Arbitrate-Seller', async (accounts) => {
+contract('Escrow-AllowChange', async (accounts) => {
   var owner = accounts[0];
   var buyer = accounts[1];
   var seller = accounts[2];
@@ -15,6 +15,7 @@ contract('Escrow-Arbitrate-Seller', async (accounts) => {
   var wethrInstance;
   var escrowInstance;
   var escrowAmount = 5000;
+  var changeEscrowAmount = 1000;
   
 
 
@@ -28,28 +29,38 @@ contract('Escrow-Arbitrate-Seller', async (accounts) => {
   })
 
   it("should add wethr to buyer account", async () => {
-    await wethrInstance.transfer(buyer,escrowAmount);
+    await wethrInstance.transfer(buyer,escrowAmount+changeEscrowAmount);
     let balance = await wethrInstance.balanceOf(buyer);
-    assert.equal(balance.valueOf(), escrowAmount);
+    assert.equal(balance.valueOf(), escrowAmount+changeEscrowAmount);
   })
 
   it("should create escrow and deduct buyer balance", async () => {
     await wethrInstance.transfer(escrowAddress, escrowAmount, {from: buyer});
     await escrowInstance.deposit({value: escrowAmount,from: buyer});
     let balance = await wethrInstance.balanceOf(buyer);
+    assert.equal(balance.valueOf(), changeEscrowAmount);
+  })
+
+  it("should allow buyer to change escrow amount and show correct balance", async () => {
+    await wethrInstance.transfer(escrowAddress, changeEscrowAmount, {from: buyer});
+    await escrowInstance.deposit({value: changeEscrowAmount,from: buyer});
+    let balance = await wethrInstance.balanceOf(buyer);
     assert.equal(balance.valueOf(), 0);
   })
 
+
+  
   it("should show right escrow balance", async () => {
     let balance = await wethrInstance.balanceOf(escrowAddress);
-    assert.equal(balance.valueOf(), escrowAmount);
+    assert.equal(balance.valueOf(), escrowAmount+changeEscrowAmount);
   })
 
 
-  it("When mediator arbitrates in favour of Seller it should show funds transferred to seller", async () => {
-    await escrowInstance.arbitrateInFavorOf(seller,{from: owner});
+  it("The happy path should show funds transferred to seller after both acceptance", async () => {
+    await escrowInstance.accept({from: buyer});
+    await escrowInstance.accept({from: seller});
     let balance = await wethrInstance.balanceOf(seller);
-    assert.equal(balance.valueOf(), escrowAmount);
+    assert.equal(balance.valueOf(), escrowAmount+changeEscrowAmount);
   })
 
 

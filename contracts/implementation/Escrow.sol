@@ -43,7 +43,7 @@ function Escrow(address buyer_address, address seller_address, address token_add
             sellerOk = true;
         }
         if (buyerOk && sellerOk){
-            payBalance();
+            payBalance(seller, this.balance);
         } else if (buyerOk && !sellerOk && now > start + 30 days) {
             // Freeze 30 days before release to buyer. The customer has to remember to call this method after freeze period.
             selfdestruct(buyer);
@@ -52,7 +52,7 @@ function Escrow(address buyer_address, address seller_address, address token_add
 
     }
     
-    function payBalance() private {
+    function payBalance(address party, uint amount) private {
         // we are sending ourselves (contract creator) a fee
        // escrow.transfer(this.balance / 100);
         // send seller the balance, send only works on ether hence changing
@@ -61,13 +61,13 @@ function Escrow(address buyer_address, address seller_address, address token_add
 //          token.approve(this, this.balance);
 //          if (token.transferFrom(this, seller, this.balance)) {
 
-        if (token.transfer(seller, this.balance)) {
-            balance = 0;
+        if (token.transfer(party, amount)) {
+            balance = balance - amount;
         } else {
             EscrowError(101, "TransferFailed", msg.sender,0);
             throw;
         }
-    EscrowEvent(200, "payBalance", msg.sender,this.balance);
+    EscrowEvent(200, "payBalance", msg.sender,amount);
     }
     
     function deposit() public payable {
@@ -91,29 +91,16 @@ function Escrow(address buyer_address, address seller_address, address token_add
 
     }
 
-    function arbitrateInFavorOfBuyer() public {
-        if (msg.sender == arbitrator){
-            // if arbitrator wants then money is returned to buyer 
-            selfdestruct(buyer);
-        }else
-        {
-            EscrowError(101, "Unauth call", msg.sender,msg.value);
-        }
-
-        EscrowEvent(500, "arbitrateInFavorOfBuyer", msg.sender,msg.value);
- 
-    }
-    
-    function arbitrateInFavorOfSeller() public {
+    function arbitrateInFavorOf(address party) public {
         if (msg.sender == arbitrator){
             // if arbitrator wants then money is returned to seller 
-            payBalance();
+            payBalance(party, this.balance);
         }else
         {
             EscrowError(101, "Unauth call", msg.sender,msg.value);
         }
-        EscrowEvent(600, "arbitrateInFavorOfSeller", msg.sender,msg.value);
-        
+        EscrowEvent(600, "arbitrateInFavorOf", msg.sender,msg.value);
+      
     }
     
     function kill() public constant {
