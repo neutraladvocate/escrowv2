@@ -35,7 +35,7 @@ contract('Escrow-Arbitrate-Seller', async (accounts) => {
 
   it("should create escrow and deduct buyer balance", async () => {
     await wethrInstance.transfer(escrowAddress, escrowAmount, {from: buyer});
-    await escrowInstance.deposit({value: escrowAmount,from: buyer});
+    await escrowInstance.deposit({value: escrowAmount,from: buyer},"dochash");
     let balance = await wethrInstance.balanceOf(buyer);
     assert.equal(balance.valueOf(), 0);
   })
@@ -47,7 +47,7 @@ contract('Escrow-Arbitrate-Seller', async (accounts) => {
 
 
   it("When mediator arbitrates in favour of Buyer it should show funds transferred to buyer", async () => {
-    await escrowInstance.arbitrateInFavorOf(buyer,{from: owner});
+    await escrowInstance.arbitrateInFavorOf(buyer,"dochash",{from: owner});
     let balance = await wethrInstance.balanceOf(buyer);
     assert.equal(balance.valueOf(), escrowAmount);
   })

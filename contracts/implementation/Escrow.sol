@@ -33,26 +33,26 @@ function Escrow(address buyer_address, address seller_address, address token_add
 
     }
     
-    event EscrowEvent(uint code, string etype, address sender, uint value);
+    event EscrowEvent(uint code, string etype, address sender, uint value, string hashContent);
     event EscrowError(uint code, string etype, address sender, uint value);
 
-    function accept() public {
+    function accept(string hashContent) public {
         if (msg.sender == buyer){
             buyerOk = true;
         } else if (msg.sender == seller){
             sellerOk = true;
         }
         if (buyerOk && sellerOk){
-            payBalance(seller, this.balance);
+            payBalance(seller, this.balance, hashContent);
         } else if (buyerOk && !sellerOk && now > start + 30 days) {
             // Freeze 30 days before release to buyer. The customer has to remember to call this method after freeze period.
             selfdestruct(buyer);
         }
-        EscrowEvent(100, "accept", msg.sender,0);
+        EscrowEvent(100, "accept", msg.sender,0, hashContent);
 
     }
     
-    function payBalance(address party, uint amount) private {
+    function payBalance(address party, uint amount, string hashContent) private {
         // we are sending ourselves (contract creator) a fee
        // escrow.transfer(this.balance / 100);
         // send seller the balance, send only works on ether hence changing
@@ -67,17 +67,17 @@ function Escrow(address buyer_address, address seller_address, address token_add
             EscrowError(101, "TransferFailed", msg.sender,0);
             throw;
         }
-    EscrowEvent(200, "payBalance", msg.sender,amount);
+    EscrowEvent(200, "payBalance", msg.sender,amount, hashContent);
     }
     
-    function deposit() public payable {
+    function deposit(string hashContent) public payable {
         if (msg.sender == buyer) {
             balance += msg.value;
         }
-    EscrowEvent(300, "deposit", msg.sender,msg.value);
+    EscrowEvent(300, "deposit", msg.sender,msg.value, hashContent);
     }
     
-    function cancel() public {
+    function cancel(string hashContent) public {
         if (msg.sender == buyer){
             buyerOk = false;
         } else if (msg.sender == seller){
@@ -87,19 +87,19 @@ function Escrow(address buyer_address, address seller_address, address token_add
         if (!buyerOk && !sellerOk){
             selfdestruct(buyer);
         }
-        EscrowEvent(400, "cancel", msg.sender,0);
+        EscrowEvent(400, "cancel", msg.sender,0,hashContent );
 
     }
 
-    function arbitrateInFavorOf(address party) public {
+    function arbitrateInFavorOf(address party, string hashContent) public {
         if (msg.sender == arbitrator){
             // if arbitrator wants then money is returned to seller 
-            payBalance(party, this.balance);
+            payBalance(party, this.balance, hashContent);
         }else
         {
             EscrowError(101, "Unauth call", msg.sender,msg.value);
         }
-        EscrowEvent(600, "arbitrateInFavorOf", msg.sender,msg.value);
+        EscrowEvent(600, "arbitrateInFavorOf", msg.sender,msg.value, hashContent);
       
     }
     

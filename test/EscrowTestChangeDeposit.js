@@ -36,14 +36,14 @@ contract('Escrow-AllowChange', async (accounts) => {
 
   it("should create escrow and deduct buyer balance", async () => {
     await wethrInstance.transfer(escrowAddress, escrowAmount, {from: buyer});
-    await escrowInstance.deposit({value: escrowAmount,from: buyer});
+    await escrowInstance.deposit("dochash",{value: escrowAmount,from: buyer});
     let balance = await wethrInstance.balanceOf(buyer);
     assert.equal(balance.valueOf(), changeEscrowAmount);
   })
 
   it("should allow buyer to change escrow amount and show correct balance", async () => {
     await wethrInstance.transfer(escrowAddress, changeEscrowAmount, {from: buyer});
-    await escrowInstance.deposit({value: changeEscrowAmount,from: buyer});
+    await escrowInstance.deposit("dochash",{value: changeEscrowAmount,from: buyer});
     let balance = await wethrInstance.balanceOf(buyer);
     assert.equal(balance.valueOf(), 0);
   })
@@ -57,8 +57,8 @@ contract('Escrow-AllowChange', async (accounts) => {
 
 
   it("The happy path should show funds transferred to seller after both acceptance", async () => {
-    await escrowInstance.accept({from: buyer});
-    await escrowInstance.accept({from: seller});
+    await escrowInstance.accept("dochash",{from: buyer});
+    await escrowInstance.accept("dochash", {from: seller});
     let balance = await wethrInstance.balanceOf(seller);
     assert.equal(balance.valueOf(), escrowAmount+changeEscrowAmount);
   })
