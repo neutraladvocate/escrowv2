@@ -87,3 +87,9 @@ ERC23 tokens should be sent by calling `transfer` function on token contract wit
 ERC23 EIP https://github.com/ethereum/EIPs/issues/223
 ERC20 EIP https://github.com/ethereum/EIPs/issues/20
 
+# Steps to test on Ganache
+truffle compile
+truffle migrate --reset --network ganache --verbose-rpc
+
+to test with ganache
+truffle test --network ganache

@@ -1,3 +1,4 @@
+# truffle compile
 FROM node:carbon-alpine
 
 WORKDIR /app

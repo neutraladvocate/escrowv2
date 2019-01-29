@@ -5,7 +5,7 @@ var ContractEscrow = artifacts.require("../contracts/implementation/Escrow.sol")
 
 
 
-contract('Escrow-Arbitrate-Seller', async (accounts) => {
+contract('Escrow-Arbitrate-Buyer', async (accounts) => {
   var owner = accounts[0];
   var buyer = accounts[1];
   var seller = accounts[2];
@@ -25,6 +25,16 @@ contract('Escrow-Arbitrate-Seller', async (accounts) => {
     escrowAddress = escrowInstance.address;
     let balance = await wethrInstance.balanceOf(owner);
     assert.equal(balance.valueOf(), wethrAmount);
+
+    balance = await wethrInstance.balanceOf(owner);
+    console.log("OwnerBalance" + balance);
+    balance = await wethrInstance.balanceOf(buyer);
+    console.log("BuyerBalance" + balance);
+    balance = await wethrInstance.balanceOf(seller);
+    console.log("SellerBalance" + balance);
+    balance = await wethrInstance.balanceOf(escrowAddress);
+    console.log("EscrowBalance" + balance);
+
   })
 
   it("should add wethr to buyer account", async () => {
@@ -35,14 +45,39 @@ contract('Escrow-Arbitrate-Seller', async (accounts) => {
 
   it("should create escrow and deduct buyer balance", async () => {
     await wethrInstance.transfer(escrowAddress, escrowAmount, {from: buyer});
-    await escrowInstance.deposit({value: escrowAmount,from: buyer},"dochash");
+    await escrowInstance.deposit("dochash", {value: escrowAmount,from: buyer});
     let balance = await wethrInstance.balanceOf(buyer);
     assert.equal(balance.valueOf(), 0);
+
+    console.log("PostDeposit");
+    balance = await wethrInstance.balanceOf(owner);
+    console.log("OwnerBalance" + balance);
+    balance = await wethrInstance.balanceOf(buyer);
+    console.log("BuyerBalance" + balance);
+    balance = await wethrInstance.balanceOf(seller);
+    console.log("SellerBalance" + balance);
+    balance = await wethrInstance.balanceOf(escrowAddress);
+    console.log("EscrowBalance" + balance);
+    balance = await escrowInstance.getBalance();
+    console.log("escrowInstance Balance" + balance);
+    let state = await escrowInstance.getState();
+    console.log("escrowInstance state" + state);
   })
 
   it("should show right escrow balance", async () => {
     let balance = await wethrInstance.balanceOf(escrowAddress);
     assert.equal(balance.valueOf(), escrowAmount);
+
+    balance = await wethrInstance.balanceOf(owner);
+    console.log("OwnerBalance" + balance);
+    balance = await wethrInstance.balanceOf(buyer);
+    console.log("BuyerBalance" + balance);
+    balance = await wethrInstance.balanceOf(seller);
+    console.log("SellerBalance" + balance);
+    balance = await wethrInstance.balanceOf(escrowAddress);
+    console.log("EscrowBalance" + balance);
+    balance = await escrowInstance.getBalance();
+    console.log("escrowInstance Balance" + balance);
   })
 
 
@@ -50,6 +85,16 @@ contract('Escrow-Arbitrate-Seller', async (accounts) => {
     await escrowInstance.arbitrateInFavorOf(buyer,"dochash",{from: owner});
     let balance = await wethrInstance.balanceOf(buyer);
     assert.equal(balance.valueOf(), escrowAmount);
+
+    balance = await wethrInstance.balanceOf(owner);
+    console.log("OwnerBalance" + balance);
+    balance = await wethrInstance.balanceOf(buyer);
+    console.log("BuyerBalance" + balance);
+    balance = await wethrInstance.balanceOf(seller);
+    console.log("SellerBalance" + balance);
+    balance = await wethrInstance.balanceOf(escrowAddress);
+    console.log("EscrowBalance" + balance);
+
   })
 
 

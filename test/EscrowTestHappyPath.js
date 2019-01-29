@@ -5,7 +5,7 @@ var ContractEscrow = artifacts.require("../contracts/implementation/Escrow.sol")
 
 
 
-contract('Escrow-HappyPath', async (accounts) => {
+contract('Escrow-HAPPYPATH', async (accounts) => {
   var owner = accounts[0];
   var buyer = accounts[1];
   var seller = accounts[2];
@@ -21,21 +21,45 @@ contract('Escrow-HappyPath', async (accounts) => {
   it("should create WETHR and ESCROW with address and balance in owner account", async () => {
     wethrInstance = await TokenWethr.deployed();
     wethrAddress = wethrInstance.address;
-    escrowInstance = await ContractEscrow.new(buyer, seller, wethrAddress,owner);
+    escrowInstance = await ContractEscrow.new(buyer, seller, wethrAddress,owner,escrowAmount);
     escrowAddress = escrowInstance.address;
     let balance = await wethrInstance.balanceOf(owner);
     assert.equal(balance.valueOf(), wethrAmount);
+
+    balance = await wethrInstance.balanceOf(owner);
+    console.log("OwnerBalance: " + balance);
+    balance = await wethrInstance.balanceOf(buyer);
+    console.log("BuyerBalance" + balance);
+    balance = await wethrInstance.balanceOf(seller);
+    console.log("SellerBalance" + balance);
+    balance = await wethrInstance.balanceOf(escrowAddress);
+    console.log("EscrowBalance" + balance);
+    let state = await escrowInstance.getState();
+    console.log("EscrowStateOnCreate" + state);
+
+  
   })
 
   it("should add wethr to buyer account", async () => {
     await wethrInstance.transfer(buyer,escrowAmount);
     let balance = await wethrInstance.balanceOf(buyer);
     assert.equal(balance.valueOf(), escrowAmount);
+
+
+  })
+
+
+  it("should show correct seller zero balance", async () => {
+    let balance = await wethrInstance.balanceOf(seller);
+    assert.equal(balance.valueOf(), 0);
   })
 
   it("should create escrow and deduct buyer balance", async () => {
+    let state = await escrowInstance.getState();
+    console.log("EscrowStateBeforeDeposit" + state);
+
     await wethrInstance.transfer(escrowAddress, escrowAmount, {from: buyer});
-    await escrowInstance.deposit("dochash",{value: escrowAmount,from: buyer});
+    await escrowInstance.depositIntoEscrow("dochash",{value: escrowAmount,from: buyer});
     let balance = await wethrInstance.balanceOf(buyer);
     assert.equal(balance.valueOf(), 0);
   })
@@ -43,14 +67,40 @@ contract('Escrow-HappyPath', async (accounts) => {
   it("should show right escrow balance", async () => {
     let balance = await wethrInstance.balanceOf(escrowAddress);
     assert.equal(balance.valueOf(), escrowAmount);
+
+    balance = await wethrInstance.balanceOf(owner);
+    console.log("OwnerBalance" + balance);
+    balance = await wethrInstance.balanceOf(buyer);
+    console.log("BuyerBalance" + balance);
+    balance = await wethrInstance.balanceOf(seller);
+    console.log("SellerBalance" + balance);
+    balance = await wethrInstance.balanceOf(escrowAddress);
+    console.log("EscrowBalance" + balance);
+    let state = await escrowInstance.getState();
+    console.log("EscrowStateAfterDeposit" + state);
+
   })
 
 
   it("The happy path should show funds transferred to seller after both acceptance", async () => {
-    await escrowInstance.accept("dochash",{from: buyer});
     await escrowInstance.accept("dochash",{from: seller});
+    await escrowInstance.accept("dochash",{from: buyer});
     let balance = await wethrInstance.balanceOf(seller);
     assert.equal(balance.valueOf(), escrowAmount);
+
+    balance = await wethrInstance.balanceOf(owner);
+    console.log("OwnerBalance" + balance);
+    balance = await wethrInstance.balanceOf(buyer);
+    console.log("BuyerBalance" + balance);
+    balance = await wethrInstance.balanceOf(seller);
+    console.log("SellerBalance" + balance);
+    balance = await wethrInstance.balanceOf(escrowAddress);
+    console.log("EscrowBalanceCHECK" + balance);
+    let state = await escrowInstance.getState();
+    console.log("EscrowStateAfterAccept" + state);
+    balance = await escrowInstance.getBalance();
+    console.log("EscrowStateBalance" + balance);
+
   })
 
 

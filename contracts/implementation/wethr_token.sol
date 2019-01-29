@@ -9,7 +9,7 @@ import "./StandardToken.sol";
 
 contract wethr_token is ERC223, StandardToken {
 
-    uint public constant initialSupply = 50000000;
+    uint public constant initialSupply = 50000000000000000000000000;
     string public constant name = "WorkEther";
     string public constant symbol = "wethr";
     uint8  public constant decimals = 18;  

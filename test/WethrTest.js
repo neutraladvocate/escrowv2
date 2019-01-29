@@ -40,6 +40,16 @@ contract('wethr_token', function(accounts) {
     assert.fail('should have thrown before');
   });
 
+  it("should throw an error when trying to transfer negative amount", async function() {
+    let token = await StandardTokenMock.new(accounts[0], 100);
+    try {
+      let transfer = await token.transfer(accounts[1], -10);
+    } catch(error) {
+      return assertJump(error);
+    }
+    assert.fail('should have thrown before');
+  });
+
   it("should return correct balances after transfering from another account", async function() {
     let token = await StandardTokenMock.new(accounts[0], 100);
     let approve = await token.approve(accounts[1], 100);

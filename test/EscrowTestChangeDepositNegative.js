@@ -5,7 +5,7 @@ var ContractEscrow = artifacts.require("../contracts/implementation/Escrow.sol")
 
 
 
-contract('Escrow-TestChangeDepsoit', async (accounts) => {
+contract('Escrow-TestChangeNegativeDeposit', async (accounts) => {
   var owner = accounts[0];
   var buyer = accounts[1];
   var seller = accounts[2];
@@ -15,7 +15,7 @@ contract('Escrow-TestChangeDepsoit', async (accounts) => {
   var wethrInstance;
   var escrowInstance;
   var escrowAmount = 5000;
-  var changeEscrowAmount = 1000;
+  var changeEscrowAmount = -1000;
   
 
 
@@ -41,7 +41,7 @@ contract('Escrow-TestChangeDepsoit', async (accounts) => {
     assert.equal(balance.valueOf(), changeEscrowAmount);
   })
 
-  it("should allow buyer to change escrow amount and show correct balance", async () => {
+  it("should allow buyer to change escrow amount by negative and show correct balance", async () => {
     await wethrInstance.transfer(escrowAddress, changeEscrowAmount, {from: buyer});
     await escrowInstance.deposit("dochash",{value: changeEscrowAmount,from: buyer});
     let balance = await wethrInstance.balanceOf(buyer);
@@ -56,7 +56,7 @@ contract('Escrow-TestChangeDepsoit', async (accounts) => {
   })
 
 
-  it("The happy path should show funds transferred to seller after both acceptance", async () => {
+  it("should show funds transferred to seller after both acceptance", async () => {
     await escrowInstance.accept("dochash",{from: buyer});
     await escrowInstance.accept("dochash", {from: seller});
     let balance = await wethrInstance.balanceOf(seller);

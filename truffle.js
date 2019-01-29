@@ -3,6 +3,11 @@ require('babel-polyfill');
 
 module.exports = {
   networks: {
+    ganache: {
+      network_id: 5777,
+      host: 'localhost',
+      port: 7545,
+    },
     development: {
       network_id: 15,
       host: 'localhost',
